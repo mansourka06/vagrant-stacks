@@ -1,0 +1,29 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+# To enable zsh, please set ENABLE_ZSH env var to "true" before launching vagrant up 
+#   + On windows => $env:ENABLE_ZSH="true"
+#   + On Linux  => export ENABLE_ZSH="true"
+
+# before you must install these plugins to speed up vagrant provisionning
+  # vagrant plugin install vagrant-faster
+  # vagrant plugin install vagrant-cachier
+
+Vagrant.configure("2") do |config|
+
+    config.cache.auto_detect = true
+    
+    config.vm.define "debian-devops-lab" do |devops|
+      devops.vm.box = "debian/buster64"
+      devops.vm.network "private_network", type: "dhcp"
+      devops.vm.hostname = "debian-devops-lab"
+      devops.vm.provider "virtualbox" do |v|
+        v.name = "debian-devops-lab"
+        v.memory = 4096
+        v.cpus = 2
+      end
+      devops.vm.provision :shell do |shell|
+        shell.path = "install_tools.sh"
+        shell.env = { 'ENABLE_ZSH' => ENV['ENABLE_ZSH'] }
+      end
+    end
+  end  
