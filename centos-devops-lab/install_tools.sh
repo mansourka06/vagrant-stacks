@@ -4,10 +4,9 @@
 set -e 
 
 # ENABLE/DESABLE INSTALL TOOLS : # supported value [ON, OFF]
-ANSIBLE=OFF
-DOCKER=OFF
-JENKINS=OFF
-TERRAFORM=OFF
+ANSIBLE=ON
+DOCKER=ON
+AWX=ON
 
 # Check the system based Distribution
 if [ -f /etc/redhat-release ]; then

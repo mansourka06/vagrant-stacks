@@ -1,0 +1,27 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+# To enable zsh, please set ENABLE_ZSH env var to "true" before launching vagrant up 
+#   + On windows => $env:ENABLE_ZSH="true"
+#   + On Linux  => export ENABLE_ZSH="true"
+
+# before you must install these plugins to speed up vagrant provisionning
+  # vagrant plugin install vagrant-faster
+  # vagrant plugin install vagrant-cachier
+
+Vagrant.configure("2") do |config|
+    
+    config.vm.define "kubemaster" do |vb|
+      vb.vm.box = "ubuntu/mantic64"
+      vb.vm.network "private_network", type: "dhcp"
+      vb.vm.hostname = "kubemaster"
+      vb.vm.provider "virtualbox" do |v|
+        v.name = "kubemaster"
+        v.memory = 4096
+        v.cpus = 2
+      end
+      vb.vm.provision :shell do |shell|
+        shell.path = "deploy.sh"
+        shell.env = { 'ENABLE_ZSH' => ENV['ENABLE_ZSH'] }
+      end
+    end
+  end  

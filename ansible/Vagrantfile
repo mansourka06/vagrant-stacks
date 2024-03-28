@@ -1,0 +1,49 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+# before you must install these plugins to speed up vagrant provisionning
+  # vagrant plugin install vagrant-faster
+  # vagrant plugin install vagrant-cachier
+
+Vagrant.configure("2") do |config|
+
+  config.cache.auto_detect = true
+
+  # Ansible master VM configuration
+  config.vm.define "ansible-master" do |ansible|
+    ansible.vm.box = "debian/buster64"
+    ansible.vm.network "private_network", type: "static", ip: "192.168.88.10"
+    ansible.vm.hostname = "ansible-master"
+    ansible.vm.provider "virtualbox" do |v|
+      v.name = "ansible-master"
+      v.memory = 4096
+      v.cpus = 2
+    end
+    # ansible.vm.provision :shell do |shell|
+    #   shell.path = "install.sh"
+    # end
+  end
+
+  # Ansible node1 VM configuration
+  config.vm.define "ansible-node1" do |ansible1|
+    ansible1.vm.box = "debian/buster64"
+    ansible1.vm.network "private_network", type: "static", ip: "192.168.88.20"
+    ansible1.vm.hostname = "ansible-node1"
+    ansible1.vm.provider "virtualbox" do |v|
+      v.name = "ansible-node1"
+      v.memory = 512
+      v.cpus = 2
+    end
+  end
+
+  # Ansible node2 VM configuration
+  config.vm.define "ansible-node2" do |ansible2|
+    ansible2.vm.box = "geerlingguy/centos7"
+    ansible2.vm.network "private_network", type: "static", ip: "192.168.88.21"
+    ansible2.vm.hostname = "ansible-node2"
+    ansible2.vm.provider "virtualbox" do |v|
+      v.name = "ansible-node2"
+      v.memory = 512
+      v.cpus = 2
+    end
+  end
+end
